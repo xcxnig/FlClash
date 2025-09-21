@@ -47,11 +47,6 @@ class NotificationModule(private val service: Service) : Module() {
     private val scope = CoroutineScope(Dispatchers.Default)
 
     override fun onInstall() {
-        State.notificationParamsFlow.value?.let {
-            update(it.extended)
-        } ?: {
-            update(NotificationParams().extended)
-        }
         scope.launch {
             val screenFlow = service.receiveBroadcastFlow {
                 addAction(Intent.ACTION_SCREEN_ON)
@@ -71,6 +66,12 @@ class NotificationModule(private val service: Service) : Module() {
                 .collect { (params, _) ->
                     update(params!!)
                 }
+
+            State.notificationParamsFlow.value?.let {
+                update(it.extended)
+            } ?: run {
+                update(NotificationParams().extended)
+            }
         }
     }
 

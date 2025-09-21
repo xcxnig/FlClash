@@ -1,5 +1,6 @@
 package com.follow.clash.service.models
 
+import com.follow.clash.common.GlobalState
 import com.follow.clash.common.formatBytes
 import com.follow.clash.core.Core
 import com.google.gson.Gson
@@ -17,7 +18,8 @@ fun Core.getSpeedTrafficText(onlyStatisticsProxy: Boolean): String {
         val res = getTraffic(onlyStatisticsProxy)
         val traffic = Gson().fromJson(res, Traffic::class.java)
         return traffic.speedText
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        GlobalState.log(e.message + "")
         return ""
     }
 }
