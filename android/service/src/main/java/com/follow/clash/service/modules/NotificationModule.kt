@@ -49,6 +49,8 @@ class NotificationModule(private val service: Service) : Module() {
     override fun onInstall() {
         State.notificationParamsFlow.value?.let {
             update(it.extended)
+        } ?: {
+            update(NotificationParams().extended)
         }
         scope.launch {
             val screenFlow = service.receiveBroadcastFlow {
